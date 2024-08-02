@@ -11,3 +11,5 @@ DEBUG = True
 ALLOWED_HOSTS = ['job-site-u07r.onrender.com']
 
 CSRF_TRUSTED_ORIGINS = ['https://job-site-u07r.onrender.com']
+
+PORT = os.environ.get('PORT', 8000)
