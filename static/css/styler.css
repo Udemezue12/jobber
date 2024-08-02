@@ -1,0 +1,56 @@
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: rgb(23, 34, 61)
+}
+
+.navbar {
+    background-color: #343a40;
+}
+
+.navbar-brand,
+.nav-link {
+    color: #fff !important;
+}
+
+.nav-link:hover {
+    color: #f8c471 !important;
+}
+
+.cta-buttons .nav-link {
+    background-color: #f8c471;
+    color: #343a40 !important;
+    border-radius: 5px;
+    padding: 8px 15px;
+    margin-left: 10px;
+}
+
+.cta-buttons .nav-link:hover {
+    background-color: #d4ac0d;
+}
+
+footer {
+    background-color: #343a40;
+    color: #fff;
+    padding: 20px 0;
+}
+
+footer p {
+    margin: 0;
+}
+
+.hero {
+    background: linear-gradient(120deg, #f8c471, #f5b041);
+    padding: 50px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+}
+
+.feature {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin: 20px 0;
+}

@@ -1,0 +1,43 @@
+from django.urls import path
+from django.contrib.auth import views as auth_views
+from . import views
+from .views import JobPostCreateView, JobPostListView, JobPostDetailView, apply_to_job, CompanyApplicationsView, update_resume, update_application_status
+
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('employer-dashboard/', views.employer_dashboard,
+         name='employer_dashboard'),
+    path('applicant-dashboard/', views.applicant_dashboard,
+         name='applicant_dashboard'),
+    path('register/', views.register, name='register'),
+    path('fetch-countries-choices/', views.fetch_countries_choices,
+         name='fetch_countries_choices'),
+    path('fetch-states/<str:country_code>/',
+         views.fetch_states, name='fetch_states'),
+    path('login/', views.custom_login, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+    path('create-profile/', views.create_profile, name='create_profile'),
+    path('create-company-profile/', views.create_company_profile,
+         name='create_company_profile'),
+    path('post-job/', views.post_job, name='post_job'),
+    path('manage-jobs/', views.manage_jobs, name='manage_jobs'),
+    path('edit-job/<int:job_id>/', views.edit_job, name='edit_job'),
+    path('jobs/', views.job_list, name='job_list'),
+    path('jobs/<int:job_id>/', views.job_detail, name='job_detail'),
+    path('apply/<int:job_id>/', views.apply_to_job, name='apply_for_job'),
+#     path('review-applications/', views.review_applications,
+#          name='review_applications'),
+     path('update-company-profile/', views.update_company_profile, name='update_company_profile'),
+    path('manage-jobs/', views.manage_jobs, name='manage_jobs'),
+    path('edit-job/<int:job_id>/', views.edit_job, name='edit_job'),
+    path('update-application-status/<int:application_id>/<str:status>/',
+         views.update_application_status, name='update_application_status'),
+    path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('manage-user/<int:user_id>/', views.manage_user, name='manage_user'),
+     path('job/create/', JobPostCreateView.as_view(), name='job_post_create'),
+    path('jobs/', JobPostListView.as_view(), name='job_post_list'),
+    path('job/<int:pk>/', JobPostDetailView.as_view(), name='job_post_detail'),
+    path('job/<int:pk>/apply/', apply_to_job, name='apply_to_job'),
+    path('company/applications/', CompanyApplicationsView.as_view(), name='company_applications'),
+    path('application/<int:pk>/update_resume/', update_resume, name='update_resume'),
+]

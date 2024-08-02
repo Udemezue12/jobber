@@ -1,0 +1,33 @@
+<!-- review_applications.html -->
+{% extends 'base.html' %}
+{% block title %}Review Applications{% endblock %}
+{% block content %}
+<div class="card mt-5">
+    <div class="card-header">Review Applications</div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Applicant</th>
+                    <th>Job</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for application in applications %}
+                    <tr>
+                        <td>{{ application.applicant.user.username }}</td>
+                        <td>{{ application.job_post.title }}</td>
+                        <td>{{ application.status }}</td>
+                        <td>
+                            <a href="{% url 'update_application_status' application.id 'accepted' %}" class="btn btn-success btn-sm">Accept</a>
+                            <a href="{% url 'update_application_status' application.id 'rejected' %}" class="btn btn-danger btn-sm">Reject</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

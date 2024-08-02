@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container jumbotron guy">
+    <style>
+        guy {
+          background-color: rgb(19, 107, 247)
+
+        }
+        .navy {
+            color: #67cd6c; /* Default color */
+            text-decoration: none; /* Remove underline */
+            transition: color 0.3s ease; /* Smooth transition for color change */
+        }
+
+        .navy:hover {
+            color: #f00; /* Color change on hover */
+        }
+
+        .hero {
+            background: linear-gradient(120deg, #f8c471, #f5b041);
+            padding: 50px;
+            border-radius: 10px;
+            color: rgb(222, 139, 139);
+            text-align: center;
+        }
+
+        .feature {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+
+    <div class="container" data-aos="zoom-out-up">
+        <h1>Welcome, {{ user.firstname }}</h1>
+    </div>
+
+    <div class="container mt-5 hero" data-aos="zoom-out-up">
+        <div class="jumbotron">
+            <h2 class="display-4">Welcome to Job Search Platform</h2>
+            <p class="lead">Your one-stop solution for finding your dream job or the perfect candidate.</p>
+            <hr class="my-4">
+            <h3 class="mb-3">Key Features:</h3>
+            <ul class="list-group">
+                <li class="list-group-item bg-dark text-light border-light"><strong>Real-Time Updates:</strong> Get the latest weather information.</li>
+                <li class="list-group-item bg-dark text-light border-light"><strong>Easy to Use:</strong> Simple and clean design.</li>
+                <li class="list-group-item bg-dark text-light border-light"><strong>Account Management:</strong> Register and log in to save your favorite cities.</li>
+            </ul>
+            <p class="mt-4">Built with Django and using the OpenWeatherMap API, our app ensures you have the latest weather information at your fingertips. Stay prepared with the Weather App!</p>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="feature" data-aos="zoom-out">
+                    <a href="{% url 'applicant_dashboard' %}" >
+                    <h2>For Job Seekers</h2>
+                    <p>Create a profile, upload your resume, and apply for jobs with ease.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="feature" data-aos="zoom-out" data-aos-delay="100">
+                    <a href="{% url 'employer_dashboard' %}" >
+                    <h2>For Employers</h2>
+                    <p>Post job vacancies, manage applications, and find the best candidates.</p>
+                </div>
+            </div>
+          
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+<!-- create_profile.html -->
+{% extends 'base.html' %}
+{% block title %}Create Profile{% endblock %}
+{% block content %}
+<div class="card mt-5">
+    <div class="card-header">Create Your Profile</div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Create Profile</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+<!-- manage_user.html -->
+{% extends 'base.html' %}
+{% block title %}Manage User{% endblock %}
+{% block content %}
+<div class="card mt-5">
+    <div class="card-header">Manage User</div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

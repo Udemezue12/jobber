@@ -1,0 +1,19 @@
+<!-- dashboard.html -->
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="card mt-5">
+    <div class="card-header">Dashboard</div>
+    <div class="card-body">
+        <h5>Welcome, {{ user.username }}!</h5>
+        <p>This is your dashboard where you can manage your profile, job posts, and applications.</p>
+        {% if user.is_employer %}
+            <a href="{% url 'job_post_create' %}" class="btn btn-primary">Post a Job</a>
+            <a href="{% url 'manage_jobs' %}" class="btn btn-secondary">Manage Jobs</a>
+        {% else %}
+            <a href="{% url 'job_post_list' %}" class="btn btn-primary">Browse Jobs</a>
+            
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

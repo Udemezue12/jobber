@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center">User Login</h2>
+                </div>
+                <div class="card-body" data-aos="flip-right"
+                data-aos-duration="3000">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                       
+                    </form>
+                    {% if form.errors %}
+
+
+                        <ul>
+
+
+                            {% for field in form %}
+                            {% for error in field.errors %}
+
+                            <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <a href="#" class="link-arrow">Forgot Password?</a>
+                    <br>
+                    <a href="{% url 'register' %}" class="link-arrow">Register</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

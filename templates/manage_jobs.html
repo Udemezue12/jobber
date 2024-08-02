@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Jobs{% endblock %}
+
+{% block content %}
+<h2>Manage Jobs</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Job Title</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for job in jobs %}
+        <tr>
+            <td>{{ job.title }}</td>
+            <td>
+                <a href="{% url 'edit_job' job.id %}">Edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
