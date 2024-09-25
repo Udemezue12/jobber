@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 import requests
 from django.contrib.auth import get_user_model as user_model
-from .models import CustomUser, Profile, Application, CompanyProfile, JobPost
+from .models import Complaint, CustomUser, Notification, Profile, Application, CompanyProfile, JobPost
 import bcrypt
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -18,130 +18,60 @@ class CustomChoiceField(forms.ChoiceField):
 
 
 # class UserRegistrationForm(UserCreationForm):
-#     first_name = forms.CharField(label='First Name', max_length=100)
-#     last_name = forms.CharField(label='Last Name', max_length=100)
-#     phone_number = forms.CharField(label='Phone Number', max_length=20)
-#     # password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-#     # password2 = forms.CharField(
-#     #     label='Confirm Password', widget=forms.PasswordInput)
-#     username = forms.CharField(label='Username', max_length=15, required=True)
-#     email = forms.EmailField(
-#         label='Email', help_text='A valid email address, please.', required=True)
-#     role = forms.ChoiceField(label='Role', choices=CustomUser.ROLE_CHOICES)
-
-#     def clean_email(self):
-#         email = self.cleaned_data.get('email')
-#         if User.objects.filter(email=email).exists():
-#             raise ValidationError('The email has already been registered')
-#         return email
-
+#     email = forms.EmailField(required=True)
 #     country = CustomChoiceField(
 #         label='Country', choices=[], widget=forms.Select(attrs={'id': 'country'}))
 #     state = CustomChoiceField(
 #         label='State', choices=[], widget=forms.Select(attrs={'id': 'state'}))
+#     phone_number = forms.CharField(label='Phone Number', max_length=20)
+#     role = forms.ChoiceField(label='Role', choices=CustomUser.ROLE_CHOICES)
 
 #     class Meta:
 #         model = CustomUser
-#         fields = ['first_name', 'last_name', 'email', 'password1',
-#                   'password2', 'phone_number', 'country', 'state', 'username', 'role']
+#         fields = ('username', 'email', 'password1', 'password2',
+#                   'first_name', 'last_name', 'phone_number', 'country', 'state', 'role')
 
-    # def __init__(self, *args, **kwargs):
-    #     super(UserRegistrationForm, self).__init__(*args, **kwargs)
-    #     self.fields['country'].choices = self.fetch_countries_choices()
-    #     self.fields['state'].choices = []
+#     def __init__(self, *args, **kwargs):
+#         super(UserRegistrationForm, self).__init__(*args, **kwargs)
+#         self.fields['country'].choices = self.fetch_countries_choices()
+#         self.fields['state'].choices = []
 
-    # def fetch_countries_choices(self):
-    #     url = "https://country-api-1.onrender.com/country/countries"
-    #     response = requests.get(url)
-    #     if response.status_code == 200:
-    #         return [(country[0], country[1]) for country in response.json()]
-    #     else:
-    #         return []
+#     def fetch_countries_choices(self):
+#         url = "https://country-api-1.onrender.com/country/countries"
+#         response = requests.get(url)
+#         if response.status_code == 200:
+#             return [(country[0], country[1]) for country in response.json()]
+#         else:
+#             return []
+
+#     def clean_email(self):
+#         email = self.cleaned_data.get('email')
+#         if CustomUser.objects.filter(email=email).exists():
+#             raise forms.ValidationError(
+#                 "This Email already exists.")
+#         return email
+
+#     def clean_phone_number(self):
+#         phone_number = self.cleaned_data.get('phone_number')
+#         if CustomUser.objects.filter(phone_number=phone_number).exists():
+#             raise forms.ValidationError(
+#                 "This Phone Number already exists.")
+#         return phone_number
 
 #     def clean_username(self):
 #         username = self.cleaned_data.get('username')
 #         if CustomUser.objects.filter(username=username).exists():
-#             raise ValidationError('The username has already been registered')
+#             raise forms.ValidationError(
+#                 "This Username already exists.")
 #         return username
-
-    # def clean_password(self):
-
-    #     password = self.cleaned_data.get('password1')
-    #     if password is None:
-    #         raise ValidationError('Password cannot be empty')
-    #     if len(password) < 8:
-    #         raise ValidationError(
-    #             'Password must be at least 8 characters long')
-    #         return password
-
-    # def clean(self):
-    #     cleaned_data = super().clean()
-    #     password = cleaned_data.get("password1")
-    #     password2 = cleaned_data.get("password2")
-
-    #     if password != password2:
-    #         raise ValidationError("Passwords do not match.")
-
-    #     self.clean_password()
-
-    #     return cleaned_data
-
-    # def save(self, commit=True):
-    #     user = super().save(commit=False)
-    #     user.set_password(self.cleaned_data["password1"])
-    #     if commit:
-    #         user.save()
-    #     return user
-
-    # def save(self, commit=True):
-    #     user = super().save(commit=False)
-    #     user.set_password(self.cleaned_data["password"])
-    #     if commit:
-    #         user.save()
-    #     return user
-    # def save(self, commit=True):
-    #     user = super(UserCreationForm, self).save(commit=False)
-    #     password = self.cleaned_data['password1']
-    #     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-    #     user.password = hashed_password.decode('utf-8')
-    #     if commit:
-    #         user.save()
-    #     return user
-
-
-# class UserLoginForm(forms.Form):
-#     username = forms.CharField(label='Username', max_length=150)
-#     password = forms.CharField(label='Password', widget=forms.PasswordInput)
-
-#     def clean(self):
-#         cleaned_data = super().clean()
-#         username = cleaned_data.get('username')
-#         password = cleaned_data.get('password')
-
-#         if username and password:
-#             self.user_cache = authenticate(
-#                 username=username, password=password)
-#             if self.user_cache is None:
-#                 raise forms.ValidationError('Invalid username or password.')
-#             elif not self.user_cache.is_active:
-#                 raise forms.ValidationError('This account is inactive.')
-#         return cleaned_data
-
-#     def get_user(self):
-#         return self.user_cache if hasattr(self, 'user_cache') else None
-
-# class CustomChoiceField(forms.ChoiceField):
-#     def validate(self, value):
-#         return super().validate(value)
-
-class UserRegistrationForm(UserCreationForm):
+class ApplicantRegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
     country = CustomChoiceField(
         label='Country', choices=[], widget=forms.Select(attrs={'id': 'country'}))
     state = CustomChoiceField(
         label='State', choices=[], widget=forms.Select(attrs={'id': 'state'}))
     phone_number = forms.CharField(label='Phone Number', max_length=20)
-    role = forms.ChoiceField(label='Role', choices=CustomUser.ROLE_CHOICES)
+    role = forms.ChoiceField(label='Role', choices=[(CustomUser.JOB_APPLICANT, 'Job Applicant')])
 
     class Meta:
         model = CustomUser
@@ -149,7 +79,56 @@ class UserRegistrationForm(UserCreationForm):
                   'first_name', 'last_name', 'phone_number', 'country', 'state', 'role')
 
     def __init__(self, *args, **kwargs):
-        super(UserRegistrationForm, self).__init__(*args, **kwargs)
+        super(ApplicantRegistrationForm, self).__init__(*args, **kwargs)
+        self.fields['country'].choices = self.fetch()
+        self.fields['state'].choices = []
+
+    def fetch(self):
+        url = "https://country-api-1.onrender.com/country/countries"
+        response = requests.get(url)
+        if response.status_code == 200:
+            return [(country[0], country[1]) for country in response.json()]
+        else:
+            return []
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if CustomUser.objects.filter(email=email).exists():
+            raise forms.ValidationError(
+                "This Email already exists.")
+        return email
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        if CustomUser.objects.filter(phone_number=phone_number).exists():
+            raise forms.ValidationError(
+                "This Phone Number already exists.")
+        return phone_number
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if CustomUser.objects.filter(username=username).exists():
+            raise forms.ValidationError(
+                "This Username already exists.")
+        return username
+
+
+class EmployerRegistrationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+    country = CustomChoiceField(
+        label='Country', choices=[], widget=forms.Select(attrs={'id': 'country'}))
+    state = CustomChoiceField(
+        label='State', choices=[], widget=forms.Select(attrs={'id': 'state'}))
+    phone_number = forms.CharField(label='Phone Number', max_length=20)
+    role = forms.ChoiceField(label='Role', choices=[(CustomUser.EMPLOYER, 'Employer')])
+
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'email', 'password1', 'password2',
+                  'first_name', 'last_name', 'phone_number', 'country', 'state', 'role')
+
+    def __init__(self, *args, **kwargs):
+        super(EmployerRegistrationForm, self).__init__(*args, **kwargs)
         self.fields['country'].choices = self.fetch_countries_choices()
         self.fields['state'].choices = []
 
@@ -161,6 +140,77 @@ class UserRegistrationForm(UserCreationForm):
         else:
             return []
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if CustomUser.objects.filter(email=email).exists():
+            raise forms.ValidationError(
+                "This Email already exists.")
+        return email
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        if CustomUser.objects.filter(phone_number=phone_number).exists():
+            raise forms.ValidationError(
+                "This Phone Number already exists.")
+        return phone_number
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if CustomUser.objects.filter(username=username).exists():
+            raise forms.ValidationError(
+                "This Username already exists.")
+        return username
+
+
+class ManagerRegistrationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+    country = CustomChoiceField(
+        label='Country', choices=[], widget=forms.Select(attrs={'id': 'country'}))
+    state = CustomChoiceField(
+        label='State', choices=[], widget=forms.Select(attrs={'id': 'state'}))
+    phone_number = forms.CharField(label='Phone Number', max_length=20)
+    role = forms.ChoiceField(label='Role', choices=[(CustomUser.MANAGER, 'Manager')])
+
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'email', 'password1', 'password2',
+                  'first_name', 'last_name', 'phone_number', 'country', 'state', 'role')
+
+    def __init__(self, *args, **kwargs):
+        super(ManagerRegistrationForm, self).__init__(*args, **kwargs)
+        self.fields['country'].choices = self.fetch_choices()
+        self.fields['state'].choices = []
+
+    def fetch_choices(self):
+        url = "https://country-api-1.onrender.com/country/countries"
+        response = requests.get(url)
+        if response.status_code == 200:
+            return [(country[0], country[1]) for country in response.json()]
+        else:
+            return []
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if CustomUser.objects.filter(email=email).exists():
+            raise forms.ValidationError(
+                "This Email already exists.")
+        return email
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        if CustomUser.objects.filter(phone_number=phone_number).exists():
+            raise forms.ValidationError(
+                "This Phone Number already exists.")
+        return phone_number
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if CustomUser.objects.filter(username=username).exists():
+            raise forms.ValidationError(
+                "This Username already exists.")
+        return username
+
+
 class UserLoginForm(AuthenticationForm):
     class Meta:
         model = CustomUser
@@ -170,7 +220,7 @@ class UserLoginForm(AuthenticationForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['resume', 'personal_details']
+        fields = ['resume', 'personal_details', 'picture']
 
 
 class CompanyProfileForm(forms.ModelForm):
@@ -181,13 +231,54 @@ class CompanyProfileForm(forms.ModelForm):
 
 
 class JobPostForm(forms.ModelForm):
+    country = CustomChoiceField(
+        label='Country', choices=[], widget=forms.Select(attrs={'id': 'country'}))
+    state = CustomChoiceField(
+        label='State', choices=[], widget=forms.Select(attrs={'id': 'state'}))
+    expiry_date = forms.DateField(
+        widget=forms.SelectDateWidget,
+        required=False,
+        help_text="Select the expiry date for the job post"
+    )
+
     class Meta:
         model = JobPost
-        fields = ['job_title', 'job_description', 'job_location', 'job_type',
-                  'job_salary', 'job_requirements']
+        fields = ['job_title', 'job_description', 'country', 'state', 'job_type',
+                  'job_salary', 'job_requirements', 'expiry_date']
+
+    def __init__(self, *args, **kwargs):
+        super(JobPostForm, self).__init__(*args, **kwargs)
+        self.fields['country'].choices = self.fetch_countries()
+        self.fields['state'].choices = []
+
+    def fetch_countries(self):
+        url = "https://country-api-1.onrender.com/country/countries"
+        response = requests.get(url)
+        if response.status_code == 200:
+            return [(country[0], country[1]) for country in response.json()]
+        else:
+            return []
 
 
 class ApplicationForm(forms.ModelForm):
     class Meta:
         model = Application
         fields = ['cover_letter', 'resume']
+
+
+class NotificationForm(forms.ModelForm):
+    class Meta:
+        model = Notification
+        fields = ['recipient', 'message', 'is_read']
+
+
+class ComplaintForm(forms.ModelForm):
+    class Meta:
+        model = Complaint
+        fields = ['subject', 'message']
+
+
+class ManagerResponseForm(forms.ModelForm):
+    class Meta:
+        model = Complaint
+        fields = ['manager_response']

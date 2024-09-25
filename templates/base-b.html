@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Search Jobs{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, rgba(33, 37, 41, 0.9), rgba(248, 196, 113, 0.9));
+            color: #fff;
+        }
+
+        .navbar {
+            background-color: #343a40;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand, .nav-link {
+            color: #f8f9fa !important;
+        }
+
+        .nav-link:hover {
+            color: #f8c471 !important;
+        }
+
+        .cta-buttons .nav-link {
+            background-color: #f8c471;
+            color: #343a40 !important;
+            border-radius: 25px;
+            padding: 8px 20px;
+            margin-left: 10px;
+        }
+
+        .cta-buttons .nav-link:hover {
+            background-color: #d4ac0d;
+        }
+
+        .container {
+            background-color: #fff;
+            color: #343a40;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: #fff;
+            padding: 40px 0;
+        }
+
+        footer p {
+            margin: 0;
+            opacity: 0.8;
+        }
+
+        footer a {
+            color: #f8c471;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #d4ac0d;
+        }
+
+        .btn-primary {
+            background-color: #f8c471;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #d4ac0d;
+        }
+
+        .card {
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card:hover {
+            box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Custom hover effect */
+        .nav-item:hover {
+            transform: translateY(-3px);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+
+<body data-aos="fade-up">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <a class="navbar-brand" href="{% url 'index' %}">Search Jobs</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    {% if user.role == 'job_applicant' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'view_applications' %}">Applications</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'job_post_list' %}">Jobs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'view_profile' %}">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'notification_list' %}">Inbox</a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'submit_complaint' %}">Customer Service</a>
+                        </li>
+                        <li class="nav-item cta-buttons">
+                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                        </li>
+                    {% elif user.role == 'employer' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'employer_dashboard' %}">Dashboard</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'notification_list' %}">Inbox</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'job_post_create' %}">Post Job</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'company_applications' %}">Review Applications</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'view_company_profile' %}">Profile</a>
+                        </li><li class="nav-item">
+                            <a class="nav-link" href="{% url 'submit_complaint' %}">Customer Service</a>
+                        </li>
+                        <li class="nav-item cta-buttons">
+                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                        </li>
+                    {% endif %}
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'applicant_register' %}">Register</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5 pt-4" data-aos="fade-up">
+        {% block content %}
+        <!-- Example job cards -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Software Engineer</h5>
+                        <p class="card-text">Exciting role in a dynamic tech company.</p>
+                        <a href="#" class="btn btn-primary">Apply Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Product Manager</h5>
+                        <p class="card-text">Join a forward-thinking product team.</p>
+                        <a href="#" class="btn btn-primary">Apply Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+
+    <footer class="text-center">
+        <div class="container" data-aos="zoom-in">
+            <p>&copy; 2024 Astro. All rights reserved. <br>
+                <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+</body>
+
+</html>

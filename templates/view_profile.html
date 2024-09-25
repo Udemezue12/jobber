@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-header text-center py-4" style="background: linear-gradient(45deg, #006d77, #83c5be); color: #fff;">
+            <h2 class="h4 mb-0"></h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <!-- Profile Picture -->
+                <div class="col-md-4 text-center mb-4">
+                    {% if profile.picture %}
+                        <img src="{{ profile.picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle shadow" style="max-width: 200px;">
+                    {% else %}
+                        <div class="no-image-placeholder d-flex justify-content-center align-items-center" style="height: 200px; background: #f1f1f1; border-radius: 50%;">
+                            <span>No profile picture</span>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Profile Details -->
+                <div class="col-md-8">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item py-3">
+                            <strong>Personal Details:</strong> 
+                            <p class="text-muted">{{ profile.personal_details }}</p>
+                        </li>
+                        
+                        <li class="list-group-item py-3">
+                            <strong>Resume:</strong> 
+                            {% if profile.resume %}
+                                <a href="{{ profile.resume.url }}" download class="btn btn-outline-info btn-sm">Download Resume</a>
+                            {% else %}
+                                <p class="text-muted">No resume uploaded.</p>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-center">
+            <a href="{% url 'update_profile' %}" class="btn btn-outline-primary btn-sm px-4">Edit Profile</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

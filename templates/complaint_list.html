@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Your Complaints</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Submitted At</th>
+                <th>Status</th>
+                <th>Response</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for complaint in complaints %}
+            <tr>
+                <td>{{ complaint.subject }}</td>
+                <td>{{ complaint.submitted_at }}</td>
+                <td>{% if complaint.manager_response %}Responded{% else %}Pending{% endif %}</td>
+                <td>
+                    {% if complaint.admin_response %}
+                    <a href="{% url 'view_complaint_response' complaint.id %}">View Response</a>
+                    {% else %}
+                    No Response
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

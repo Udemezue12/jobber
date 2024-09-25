@@ -1,15 +1,23 @@
 <!-- apply_for_job.html -->
 {% extends 'base.html' %}
+
 {% block title %}Apply for Job{% endblock %}
+
 {% block content %}
-<div class="card mt-5">
-    <div class="card-header">Apply for Job: {{ job.title }}</div>
-    <div class="card-body">
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Apply</button>
-        </form>
+<div class="container mt-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Apply for Job: {{ job.job_title }}</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" class="p-3">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success btn-lg">Submit Application</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

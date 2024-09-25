@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">My Job Applications</h2>
+
+    {% if applications %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Job Title</th>
+                        <th>Company Name</th>
+                        <th>Company Location</th>
+                        <th>Resume</th>
+                        <th>Cover Letter</th>
+                        <th>Status</th>
+                        <th>Submitted At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for application in applications %}
+                        <tr>
+                            <td>{{ application.job_post.job_title }}</td>
+                            <td>{{ application.job_post.company.company_name }}</td>
+                            <td>{{ application.job_post.user.country }}</td>
+                            <td><a href="{{ application.resume.url }}" download>Download Resume</a></td>
+                            <td>{{ application.cover_letter }}</td>
+                            <td>{{ application.get_status_display }}</td>
+                            <td>{{ application.submitted_at }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="alert alert-info">You have not applied for any jobs yet.</p>
+    {% endif %}
+
+    <a href="{% url 'job_post_list' %}" class="btn btn-secondary mt-3">Back to Job Listings</a>
+</div>
+{% endblock %}

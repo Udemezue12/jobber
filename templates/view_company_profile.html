@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-header text-center py-4" style="background: linear-gradient(45deg, #1d3557, #457b9d); color: #fff;">
+            <h2 class="h4 mb-0"></h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item py-3">
+                            <strong>Company Name:</strong> <span class="text-primary">{{ company_profile.company_name }}</span>
+                        </li>
+                        <li class="list-group-item py-3">
+                            <strong>Company Address:</strong> <span class="text-muted">{{ company_profile.company_address }}</span>
+                        </li>
+                        <li class="list-group-item py-3">
+                            <strong>Hiring Needs:</strong> <span>{{ company_profile.hiring_needs }}</span>
+                        </li>
+                        <li class="list-group-item py-3">
+                            <strong>Business Info:</strong> <span>{{ company_profile.business_info }}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4 text-center">
+                    {% if company_profile.company_logo %}
+                        <div class="company-logo mb-3">
+                            <img src="{{ company_profile.company_logo.url }}" alt="Company Logo" class="img-fluid rounded-circle shadow" style="max-width: 150px;">
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-center py-3">
+            <a href="{% url 'update_company_profile' %}" class="btn btn-outline-primary btn-sm px-4">Edit Profile</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,98 +1,94 @@
-{% load static %}
-
+{% load static %} 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Search Jobs{% endblock %}</title>
+    <title>{% block title %}JOB ARENA{% endblock %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <!-- <link rel="stylesheet" href="{% static 'css/styler.css' %}"> -->
-
-    <style>
-        body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background-color: rgb(23, 34, 61)
-            
-        }
-        .navbar {
-            background-color: #343a40;
-        }
-        .navbar-brand, .nav-link {
-            color: #fff !important;
-        }
-        .nav-link:hover {
-            color: #f8c471 !important;
-        }
-        .cta-buttons .nav-link {
-            background-color: #f8c471;
-            color: #343a40 !important;
-            border-radius: 5px;
-            padding: 8px 15px;
-            margin-left: 10px;
-        }
-        .cta-buttons .nav-link:hover {
-            background-color: #d4ac0d;
-        }
-        footer {
-            background-color: #343a40;
-            color: #fff;
-            padding: 20px 0;
-        }
-        footer p {
-            margin: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <a class="navbar-brand" href="{% url 'index' %}">Search Jobs</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                {% if user.is_authenticated %}
-                    {% if user.role == 'job_applicant' %}
-                    <li class="nav-item cta-buttons">
-                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Check Weather</a>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'create_profile' %}">Create Profile</a></li>
-                    {% elif user.role == 'employer' %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'employer_dashboard' %}">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'create_company_profile' %}">Create Company Profile</a></li>
-                    <li class="nav-item"><a href="{% url 'job_post_create' %}" class="nav-link">Post Job</a></li>
-                    <li class="nav-item"><a href="{% url 'company_applications' %}" class="nav-link">Review Applications</a></li>
-                    <li class="nav-item"><a href="{% url 'manage_jobs' %}" class="nav-link">Manage Jobs</a></li>
-                    <li class="nav-item cta-buttons">
-                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                    </li>
+
+<body data-aos="fade-up">
+    <!-- Navbar at the top -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">JOB ARENA</a>
+            
+            {% if user.is_authenticated and user.role == 'job_applicant' %}
+                <form class="form-inline mx-auto" action="{% url 'search_jobs' %}" method="GET">
+                    <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search jobs, companies..." aria-label="Search" style="width: 300px;">
+                    <button class="btn btn-warning my-2 my-sm-0" type="submit">Search</button>
+                </form>
+                
+            {% endif %}
+            
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+                        {% if user.role == 'job_applicant' %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'view_applications' %}">Applications</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'job_post_list' %}">Jobs</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'view_profile' %}">Profile</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'notification_list' %}">Inbox</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'submit_complaint' %}">Help & Support</a></li>
+                            <li class="nav-item"><a class="nav-link btn btn-warning text-dark ml-2" href="{% url 'logout' %}">Logout</a></li>
+                        {% elif user.role == 'employer' %}
+                            
+                            <li class="nav-item"><a class="nav-link" href="{% url 'notification_list' %}">Inbox</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'job_post_create' %}">Post Job</a></li>
+                            
+                            <li class="nav-item"><a class="nav-link" href="{% url 'view_company_profile' %}">Profile</a></li>
+                            <li class="nav-item"><a class="nav-link btn btn-warning text-dark ml-2" href="{% url 'logout' %}">Logout</a></li>
+                            {% elif user.role == 'manager' %}
+                            <li class="nav-item"><a class="nav-link btn btn-warning text-dark ml-2" href="{% url 'user_list' %}">Users</a></li>
+                            <li class="nav-item"><a class="nav-link btn btn-warning text-dark ml-2" href="{% url 'complaint_list' %}">Resolve Complaints</a></li>
+                            <li class="nav-item"><a class="nav-link btn btn-warning text-dark ml-2" href="{% url 'logout' %}">Logout</a></li>
+                        {% endif %}
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
                     {% endif %}
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Register</a>
-                    </li>
-                {% endif %}
-            </ul>
+                </ul>
+            </div>
         </div>
     </nav>
-    <div class="container mt-4">
+
+    <!-- Create space between the navbar and content body -->
+    <div style="padding-top: 70px;"></div>
+
+    {% if user.is_authenticated and user.role == 'job_applicant' %}
+    <div class="jumbotron jumbotron-fluid text-center bg-primary text-white">
+        <div class="container">
+            <h1 class="display-4">Find Your Dream Job</h1>
+        </div>
+    </div>
+    {% elif user.is_authenticated and user.role == 'employer' %}
+    <div class="jumbotron jumbotron-fluid text-center bg-primary text-white">
+        <div class="container">
+            <h1 class="display-4">Find A Qualified Worker</h1>
+            <p class="lead">Create a Job and Have Qualified Job Seekers Apply</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="container" data-aos="fade-up">
         {% block content %}
         {% endblock %}
     </div>
-    <footer class="text-center">
-        <div class="container" data-aos="zoom-out-down">
-            <p>&copy; 2024 Astro. All rights reserved.</p>
+
+    <footer class="bg-dark text-center text-white py-4 mt-5">
+        <div class="container">
+            <p>&copy; 2024 Astro. All rights reserved. <br>
+                <a href="#" class="text-warning">Privacy Policy</a> | <a href="#" class="text-warning">Terms of Service</a>
+            </p>
         </div>
     </footer>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -101,4 +97,5 @@
         AOS.init();
     </script>
 </body>
+
 </html>

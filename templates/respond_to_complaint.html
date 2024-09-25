@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Respond to Complaint{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white">
+            <h2 class="text-center">Respond to Complaint</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>Complaint from:</strong> {{ complaint.sender.username }} ({{ complaint.sender_role }})</p>
+            <p><strong>Subject:</strong> {{ complaint.subject }}</p>
+            <p><strong>Message:</strong> {{ complaint.message }}</p>
+            <hr>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.as_p }}
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg">Submit Response</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+            <h2>Complaint Details</h2>
+        </div>
+        <div class="card-body p-4">
+            <h4 class="mb-4">{{ complaint.subject }}</h4>
+            <p><strong>Submitted At:</strong> {{ complaint.submitted_at }}</p>
+            <p><strong>Message:</strong> {{ complaint.message }}</p>
+
+            {% if complaint.Manger_response %}
+                <hr>
+                <h5 class="mt-4">Manger Response</h5>
+                <p><strong>Response Submitted At:</strong> {{ complaint.response_submitted_at }}</p>
+                <p>{{ complaint.admin_response }}</p>
+            {% else %}
+                <p class="text-danger"><strong>Status:</strong> No response yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Search Results for "{{ query }}"</h2>
+
+    {% if results %}
+        <ul class="list-group mt-4">
+            {% for job in results %}
+                <li class="list-group-item">
+                    <h4>{{ job.job_title }}</h4>
+                    <p>{{ job.job_description|truncatewords:20 }}</p>
+                    <p><strong>Location:</strong> {{ job.country }}, {{ job.state }}</p>
+                    <p><strong>Company:</strong> {{ job.company.company_name }}</p>
+                    <a href="{% url 'job_post_detail' job.pk %}" class="btn btn-primary">View Job</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No jobs found for your search query.</p>
+    {% endif %}
+
+    <!-- Back to Home Button -->
+    <div class="mt-4">
+        <a href="{% url 'index' %}" class="btn btn-secondary">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

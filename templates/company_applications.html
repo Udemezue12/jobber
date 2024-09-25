@@ -1,15 +1,50 @@
-<!-- post_job.html -->
 {% extends 'base.html' %}
-{% block title %}Post a Job{% endblock %}
+
 {% block content %}
-<div class="card mt-5">
-    <div class="card-header">Applications for {{ request.user.company_profile.company_name }}</div>
-    <div class="card-body">
-        <ul>
-            {% for application in applications %}
-              <li>{{ application.user.username }} - {{ application.status }}</li>
-            {% endfor %}
-          </ul>
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-header text-center py-4" style="background: linear-gradient(45deg, #4a90e2, #6dd5ed); color: #fff;">
+            <h2 class="h3 mb-0">Job Applications for Your Posts</h2>
+        </div>
+        <div class="card-body">
+            {% if applications %}
+                <ul class="list-group list-group-flush">
+                    {% for application in applications %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3" style="background: #ffffff; border-radius: 10px; margin-bottom: 15px; transition: box-shadow 0.3s ease;">
+                        <div>
+                            <h5 class="font-weight-bold mb-1">{{ application.job_post.job_title }}</h5>
+                            <p class="mb-2">Applicant: <span class="text-primary font-weight-bold">{{ application.user.full_name }}</span></p>
+                            <p class="mb-2">Status: 
+                                <span class="{% if application.status == 'accepted' %}text-success{% elif application.status == 'declined' %}text-danger{% else %}text-muted{% endif %} font-weight-bold">
+                                    {{ application.status|capfirst }}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            {% if application.status == 'accepted' %}
+                                <button disabled class="btn btn-success btn-sm shadow-sm">Accepted</button>
+                            {% elif application.status == 'declined' %}
+                                <button disabled class="btn btn-danger btn-sm shadow-sm">Declined</button>
+                            {% else %}
+                                <form method="post" action="{% url 'accept_application' application.pk %}" class="mr-2">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary btn-sm shadow-sm">Accept</button>
+                                </form>
+                                <form method="post" action="{% url 'decline_application' application.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-warning btn-sm shadow-sm">Decline</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="text-center py-5">
+                    <p class="text-muted" style="font-size: 1.1rem;">No applications available for your job posts.</p>
+                </div>
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}

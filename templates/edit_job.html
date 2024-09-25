@@ -3,10 +3,19 @@
 {% block title %}Edit Job{% endblock %}
 
 {% block content %}
-<h2>Edit Job: {{ form.instance.title }}</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save Changes</button>
-</form>
+<div class="container mt-5">
+    <h2 class="mb-4">Edit Job: {{ form.instance.job_title }}</h2>
+
+    <div class="card shadow-lg border-0">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary btn-lg btn-block mt-3">Save Changes</button>
+            </form>
+
+            <a href="{% url 'view_posted_jobs' %}" class="btn btn-secondary mt-3">Back to Posted Jobs</a>
+        </div>
+    </div>
+</div>
 {% endblock %}
