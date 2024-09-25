@@ -403,8 +403,7 @@ def update_application_status(request, application_id, status):
         Application, id=application_id, job_post__company=request.user.company_profile)
     application.status = status
     application.save()
-    message = f"Your application for {
-        application.job_post.job_title} has been {status}."
+    message = f"Your application for {application.job_post.job_title} has been {status}."
     create_notification(application.user, message)
     return redirect('review_applications')
 
@@ -481,10 +480,7 @@ def accept_application(request, pk):
         application.save()
 
         Notification.notify_user(
-            application.user,
-            f'Your application for the job "{
-                application.job_post.job_title}" has been accepted.'
-        )
+            application.user,f'Your application for the job "{application.job_post.job_title}" has been accepted.')
         messages.success(request, "Application has been accepted.")
 
     return redirect('company_applications')
@@ -501,11 +497,7 @@ def decline_application(request, pk):
         application.status = 'declined'
         application.save()
 
-        Notification.notify_user(
-            application.user,
-            f'Your application for the job "{
-                application.job_post.job_title}" has been declined.'
-        )
+        Notification.notify_user(application.user,f'Your application for the job "{application.job_post.job_title}" has been declined.')
         messages.success(request, "Application has been declined.")
 
     return redirect('company_applications')
