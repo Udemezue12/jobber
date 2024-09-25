@@ -46,7 +46,7 @@
                             <li class="nav-item"><a class="nav-link btn btn-warning text-dark ml-2" href="{% url 'logout' %}">Logout</a></li>
                             {% elif user.role == 'manager' %}
                             <li class="nav-item"><a class="nav-link btn btn-warning text-dark ml-2" href="{% url 'user_list' %}">Users</a></li>
-                            <li class="nav-item"><a class="nav-link btn btn-warning text-dark ml-2" href="{% url 'complaint_list' %}">Resolve Complaints</a></li>
+                            <li class="nav-item"><a class="nav-link btn btn-warning text-dark ml-2" href="{% url 'complaint_lists' %}">Resolve Complaints</a></li>
                             <li class="nav-item"><a class="nav-link btn btn-warning text-dark ml-2" href="{% url 'logout' %}">Logout</a></li>
                         {% endif %}
                     {% else %}

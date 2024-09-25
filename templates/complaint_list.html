@@ -1,33 +1,53 @@
 {% extends 'base.html' %}
 
+{% block title %}View Complaint{% endblock %}
+
 {% block content %}
-<div class="container">
-    <h2>Your Complaints</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Subject</th>
-                <th>Submitted At</th>
-                <th>Status</th>
-                <th>Response</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for complaint in complaints %}
-            <tr>
-                <td>{{ complaint.subject }}</td>
-                <td>{{ complaint.submitted_at }}</td>
-                <td>{% if complaint.manager_response %}Responded{% else %}Pending{% endif %}</td>
-                <td>
-                    {% if complaint.admin_response %}
-                    <a href="{% url 'view_complaint_response' complaint.id %}">View Response</a>
-                    {% else %}
-                    No Response
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="container mt-5">
+    <h2 class="mb-4">Complaint: {{ complaint.subject }}</h2>
+
+    <!-- Display the user's original complaint -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Your Complaint</h5>
+            <p>{{ complaint.message }}</p>
+            <p class="text-muted">Submitted at: {{ complaint.submitted_at }}</p>
+        </div>
+    </div>
+
+    <!-- Display the manager's response if available -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Manager's Response</h5>
+            {% if complaint.manager_response %}
+                <p>{{ complaint.manager_response }}</p>
+                <p class="text-muted">Response submitted at: {{ complaint.response_submitted_at }}</p>
+            {% else %}
+                <p class="text-warning">No response from the manager yet.</p>
+            {% endif %}
+        </div>
+        
+    </div>
+
+    <!-- Reply form for the user to respond -->
+    <h3 class="mb-4">Your Reply</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Reply</button>
+    </form>
+
+    <!-- If user already replied, show the reply -->
+    {% if complaint.user_reply %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Your Reply</h5>
+            <p>{{ complaint.user_reply }}</p>
+            <p class="text-muted">Submitted at: {{ complaint.user_reply_submitted_at }}</p>
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

@@ -1,28 +1,47 @@
-{% extends 'base.html' %}
-
-{% block title %}Respond to Complaint{% endblock %}
-
+{% extends "base.html" %}
 {% block content %}
 <div class="container mt-5">
-    <div class="card shadow-lg border-0">
-        <div class="card-header bg-primary text-white">
-            <h2 class="text-center">Respond to Complaint</h2>
+    <h2 class="mb-4">Complaint: {{ complaint.subject }}</h2>
+
+    <!-- Complaint Details -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            Complaint Details
         </div>
         <div class="card-body">
-            <p><strong>Complaint from:</strong> {{ complaint.sender.username }} ({{ complaint.sender_role }})</p>
-            <p><strong>Subject:</strong> {{ complaint.subject }}</p>
-            <p><strong>Message:</strong> {{ complaint.message }}</p>
-            <hr>
-            <form method="POST">
+            <p>{{ complaint.message }}</p>
+        </div>
+    </div>
+
+    <!-- Manager's Response Form -->
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+            Manager's Response
+        </div>
+        <div class="card-body">
+            <form method="post">
                 {% csrf_token %}
                 <div class="form-group">
                     {{ form.as_p }}
                 </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary btn-lg">Submit Response</button>
-                </div>
+                <button type="submit" class="btn btn-success">Submit Response</button>
             </form>
         </div>
     </div>
+
+    <!-- User's Reply -->
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            User's Reply
+        </div>
+        <div class="card-body">
+            {% if complaint.user_reply %}
+                <p>{{ complaint.user_reply }}</p>
+                <p class="text-muted">Submitted at: {{ complaint.user_reply_submitted_at }}</p>
+            {% else %}
+                <p class="text-muted">No reply yet.</p>
+            {% endif %}
+        </div>
+    </div>
 </div>
-{% endblock %}
+{% endblock  %}

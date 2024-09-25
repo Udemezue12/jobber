@@ -73,6 +73,7 @@ urlpatterns = [
     path('jobs/delete/<int:job_id>/', views.delete_job, name='delete_job'),
      path('complaints/submit/', views.submit_complaint, name='submit_complaint'),
     path('complaints/', views.view_complaints, name='complaint_list'),
+    path('manager/complaints/', views.view_all_complaints, name='complaint_lists'),
     path('complaints/<int:complaint_id>/response/', views.view_complaint_response, name='view_complaint_response'),
     path('complaints/<int:complaint_id>/respond/', views.respond_to_complaint, name='respond_to_complaint'),
     path('search/', views.search_jobs, name='search_jobs'),

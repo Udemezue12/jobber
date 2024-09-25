@@ -141,6 +141,9 @@ class Application(models.Model):
         'pending', 'Pending'), ('reviewed', 'Reviewed'), ('rejected', 'Rejected')])
 
 
+from django.db import models
+from django.utils import timezone
+
 class Complaint(models.Model):
     SENDER_ROLE_CHOICES = [
         ('employer', 'Employer'),
@@ -151,14 +154,19 @@ class Complaint(models.Model):
         CustomUser, on_delete=models.CASCADE, related_name='sent_complaints')
     sender_role = models.CharField(max_length=20, choices=SENDER_ROLE_CHOICES)
     manager = models.ForeignKey(CustomUser, on_delete=models.CASCADE,
-                              related_name='received_complaints', limit_choices_to={'role': 'manager'})
+                                related_name='received_complaints', limit_choices_to={'role': 'manager'})
     subject = models.CharField(max_length=255)
     message = models.TextField()
     submitted_at = models.DateTimeField(auto_now_add=True)
-    manager_response = models.TextField(
-        null=True, blank=True)  
+    
+    manager_response = models.TextField(null=True, blank=True)
     response_submitted_at = models.DateTimeField(null=True, blank=True)
     response_viewed = models.BooleanField(default=False)
+    
+    user_reply = models.TextField(null=True, blank=True)
+    user_reply_submitted_at = models.DateTimeField(null=True, blank=True)
+    reply_viewed_by_manager = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Complaint from {self.sender} ({self.sender_role}) to Manager"
+

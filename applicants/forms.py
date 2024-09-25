@@ -282,3 +282,7 @@ class ManagerResponseForm(forms.ModelForm):
     class Meta:
         model = Complaint
         fields = ['manager_response']
+class UserReplyForm(forms.ModelForm):
+    class Meta:
+        model = Complaint
+        fields = ['user_reply']

@@ -15,7 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from applicants.models import Application, CustomUser, JobPost, CompanyProfile, Notification, Profile, Complaint
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import ManagerResponseForm, UserLoginForm, ApplicantRegistrationForm, ManagerRegistrationForm, EmployerRegistrationForm, ApplicationForm, CompanyProfileForm, JobPostForm, ProfileForm, ComplaintForm
+from .forms import ManagerResponseForm, UserLoginForm, ApplicantRegistrationForm, ManagerRegistrationForm, EmployerRegistrationForm, ApplicationForm, CompanyProfileForm, JobPostForm, ProfileForm, ComplaintForm, UserReplyForm
 
 # /////////////////////////////////////////////////ERROR PAGES/////////// ///////////////////////////////////////////////////////////////////////
 
@@ -559,7 +559,7 @@ def submit_complaint(request):
             complaint = form.save(commit=False)
             complaint.sender = request.user
             complaint.sender_role = request.user.role
-            complaint.admin = CustomUser.objects.filter(
+            complaint.manager= CustomUser.objects.filter(
                 role='manager').first()  
             complaint.save()
             return redirect('complaint_list')
@@ -577,53 +577,57 @@ def respond_to_complaint(request, complaint_id):
     complaint = get_object_or_404(
         Complaint, id=complaint_id, manager=request.user)
 
+    if complaint.user_reply and not complaint.reply_viewed_by_manager:
+        complaint.reply_viewed_by_manager = True
+        complaint.save()
+
     if request.method == 'POST':
         form = ManagerResponseForm(request.POST, instance=complaint)
         if form.is_valid():
             complaint = form.save(commit=False)
             complaint.response_submitted_at = timezone.now()
             complaint.save()
-            return redirect('view_complaints')
+            return redirect('complaint_lists')
     else:
         form = ManagerResponseForm(instance=complaint)
 
-    return render(request, 'respond_to_complaint.html', {'form': form, 'complaint': complaint})
+    return render(request, 'respond_to_complaint.html', {
+        'form': form,
+        'complaint': complaint,
+    })
+
+
+
+
 
 
 # @login_required
-# def respond_to_complaint(request, complaint_id):
-#     if request.user.role != 'admin':
+# def view_complaint_response(request, complaint_id):
+#     if request.user.role not in ['employer', 'job_applicant']:
 #         return render(request, 'error.html', {'message': 'You do not have permission to view this page.'})
 
 #     complaint = get_object_or_404(
-#         Complaint, id=complaint_id, admin=request.user)
+#         Complaint, id=complaint_id, sender=request.user)
+
+#     if complaint.manager_response and not complaint.response_viewed:
+#         complaint.response_viewed = True
+#         complaint.save()
 
 #     if request.method == 'POST':
-#         form = AdminResponseForm(request.POST, instance=complaint)
+#         form = UserReplyForm(request.POST, instance=complaint)
 #         if form.is_valid():
 #             complaint = form.save(commit=False)
-#             complaint.response_submitted_at = timezone.now()
+#             complaint.user_reply_submitted_at = timezone.now()  
+#             complaint.reply_viewed_by_manager = False  
 #             complaint.save()
-#             return redirect('view_complaints')
+#             return redirect('complaint_list')
 #     else:
-#         form = AdminResponseForm(instance=complaint)
+#         form = UserReplyForm(instance=complaint)
 
-#     return render(request, 'respond_to_complaint.html', {'form': form, 'complaint': complaint})
-
-
-@login_required
-def view_complaint_response(request, complaint_id):
-    if request.user.role not in ['employer', 'job_applicant']:
-        return render(request, 'error.html', {'message': 'You do not have permission to view this page.'})
-
-    complaint = get_object_or_404(
-        Complaint, id=complaint_id, sender=request.user)
-
-    if complaint.manager_response and not complaint.response_viewed:
-        complaint.response_viewed = True
-        complaint.save()
-
-    return render(request, 'view_complaint_response.html', {'complaint': complaint})
+#     return render(request, 'view_complaint_response.html', {
+#         'complaint': complaint,
+#         'form': form,
+#     })
 
 
 @login_required
@@ -674,3 +678,27 @@ class UserDetail(LoginRequiredMixin, DetailView):
     context_object_name = 'user'
 
     
+
+@login_required
+def view_complaint_response(request, complaint_id):
+    complaint = get_object_or_404(Complaint, id=complaint_id, sender=request.user)
+
+    if complaint.manager_response and not complaint.response_viewed:
+        complaint.response_viewed = True
+        complaint.save()
+
+    if request.method == 'POST':
+        form = UserReplyForm(request.POST, instance=complaint)
+        if form.is_valid():
+            complaint = form.save(commit=False)
+            complaint.user_reply_submitted_at = timezone.now()
+            complaint.reply_viewed_by_manager = False 
+            complaint.save()
+            return redirect('complaint_list')
+    else:
+        form = UserReplyForm(instance=complaint)
+
+    return render(request, 'view_complaint_response.html', {
+        'complaint': complaint,
+        'form': form,
+    })

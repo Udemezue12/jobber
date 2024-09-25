@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Complaints</h2>
+    
+    <div class="list-group">
+        {% for complaint in complaints %}
+            <a href="{% url 'respond_to_complaint' complaint.id %}" class="list-group-item list-group-item-action">
+                <strong>{{ complaint.subject }}</strong> - Submitted by: {{ complaint.sender.username }}
+            </a>
+        {% empty %}
+            <div class="alert alert-info">
+                No complaints found.
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
