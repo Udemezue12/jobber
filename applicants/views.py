@@ -53,10 +53,7 @@ def create_notification(user, message):
     Notification.objects.create(recipient=user, message=message)
 
 
-# def fetch_countries_choices(request):
-#     form = UserRegistrationForm()
-#     countries = form.fetch_countries_choices()
-#     return JsonResponse(countries, safe=False)
+
 def fetch_countries_choices(request):
     form = EmployerRegistrationForm()
     countries = form.fetch_countries_choices()

@@ -6,7 +6,7 @@ from django.db import models
 from .doc import image, document
 
 
-# Configure logging (optional, but useful for debugging)
+
 logger = logging.getLogger(__name__)
 
 
